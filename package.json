@@ -1,6 +1,6 @@
 {
 	"name": "decircular",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Remove circular references from objects",
 	"license": "MIT",
 	"repository": "sindresorhus/decircular",
