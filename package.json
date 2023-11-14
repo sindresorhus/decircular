@@ -1,0 +1,48 @@
+{
+	"name": "decircular",
+	"version": "0.0.0",
+	"description": "Remove circular references from objects",
+	"license": "MIT",
+	"repository": "sindresorhus/decircular",
+	"funding": "https://github.com/sponsors/sindresorhus",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "https://sindresorhus.com"
+	},
+	"type": "module",
+	"exports": {
+		"types": "./index.d.ts",
+		"default": "./index.js"
+	},
+	"sideEffects": false,
+	"engines": {
+		"node": ">=18"
+	},
+	"scripts": {
+		"test": "xo && ava && tsc index.d.ts"
+	},
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"keywords": [
+		"circular",
+		"object",
+		"destroy",
+		"remove",
+		"reference",
+		"ref",
+		"copy",
+		"array",
+		"serialization",
+		"json",
+		"stringify",
+		"cyclic"
+	],
+	"devDependencies": {
+		"ava": "^5.3.1",
+		"typescript": "^5.2.2",
+		"xo": "^0.56.0"
+	}
+}
