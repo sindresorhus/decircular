@@ -45,6 +45,32 @@ test('handles circular references in arrays', t => {
 	t.deepEqual(decircular(array), [1, 2, 3, '[Circular *]']);
 });
 
+test('handles non-circular references in objects', t => {
+	const object = {
+		a: {
+			b: {
+				c: {
+					d: 1,
+				},
+			},
+		},
+	};
+	object.a.b.e = object.a.b.c;
+
+	t.deepEqual(decircular(object), {
+		a: {
+			b: {
+				c: {
+					d: 1,
+				},
+				e: {
+					d: 1,
+				},
+			},
+		},
+	});
+});
+
 test('handles complex structures with multiple circular references', t => {
 	const object = {
 		a: 1,
@@ -64,7 +90,10 @@ test('handles complex structures with multiple circular references', t => {
 			e: '[Circular *]',
 		},
 		d: [
-			'[Circular *b]',
+			{
+				c: 2,
+				e: '[Circular *]',
+			},
 		],
 	});
 });
@@ -76,19 +105,18 @@ test('handles circular references with array indices in the path', t => {
 				b: 1,
 				c: 1,
 			},
-			{},
 		],
 	};
 
-	object.a[1] = object.a[0]; // Circular reference to the array element at index 1
+	object.a[0].d = object.a[0]; // Circular reference to the array element at index 1
 
 	t.deepEqual(decircular(object), {
 		a: [
 			{
 				b: 1,
 				c: 1,
+				d: '[Circular *a.0]',
 			},
-			'[Circular *a.0]',
 		],
 	});
 });
@@ -115,26 +143,16 @@ test('handles deep nested circular references', t => {
 
 test('handles circular references in objects within arrays', t => {
 	const object = {
-		a: [
-			{
-				b: 1,
-			}, {
-				c: 2,
-			},
-		],
+		a: [],
+		b: [],
 	};
 
-	object.a[1].ref = object.a[0]; // Circular reference to another object in the array
+	object.a[0] = object.b; // Circular reference to another object in the array
+	object.b[0] = object.a; // Circular reference to another object in the array
 
 	t.deepEqual(decircular(object), {
-		a: [
-			{
-				b: 1,
-			}, {
-				c: 2,
-				ref: '[Circular *a.0]',
-			},
-		],
+		a: [['[Circular *a]']],
+		b: [['[Circular *b]']],
 	});
 });
 
@@ -233,7 +251,15 @@ test('handles circular references in large complex objects', t => {
 			},
 		},
 		e: {
-			f: '[Circular *a.b.c.ref]',
+			f: {
+				g: 2,
+				ref: {
+					c: {
+						d: 1,
+						ref: '[Circular *e.f]',
+					},
+				},
+			},
 		},
 	});
 });
