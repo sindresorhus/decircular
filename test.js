@@ -1,17 +1,6 @@
 import test from 'ava';
 import decircular from './index.js';
 
-const object = {
-	a: 1,
-	b: {
-		c: 2,
-	},
-};
-
-object.b.d = object.b; // Creates a circular reference
-
-console.log(decircular(object));
-
 test('handles circular references in objects', t => {
 	const object = {a: 1};
 	object.b = object; // Circular reference
